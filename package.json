@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/DouglasFuelber/hackernews-node#readme",
   "dependencies": {
+    "@prisma/client": "^2.15.0",
     "apollo-server": "^2.19.2"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.15.0"
   }
 }
