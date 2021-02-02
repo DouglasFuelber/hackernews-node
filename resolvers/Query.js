@@ -2,12 +2,25 @@ function info() {
   return `This is the API of a Hackernews Clone`;
 };
 
-function feed(parent, args, context) {
-  return context.prisma.link.findMany();
+async function feed(parent, args, context, info) {
+  const where = args.filter
+    ? {
+      OR: [
+        { description: { contains: args.filter } },
+        { url: { contains: args.filter } },
+      ],
+    }
+    : {}
+
+  const links = await context.prisma.link.findMany({
+    where,
+  })
+
+  return links
 }
 
-function link(parent, { id }, context) {
-  return context.prisma.link.findUnique({
+async function link(parent, { id }, context) {
+  return await context.prisma.link.findUnique({
     where: { id: parseInt(id) }
   });
 }
