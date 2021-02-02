@@ -3,46 +3,18 @@ const path = require('path');
 
 const { PrismaClient } = require('@prisma/client')
 const { ApolloServer } = require('apollo-server');
+const { getUserId } = require('./utils');
+
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const User = require('./resolvers/User')
+const Link = require('./resolvers/Link')
 
 const resolvers = {
-  Query: {
-    info: () => `This is the API of a Hackernews Clone`,
-    feed: async (parent, args, context) => {
-      return await context.prisma.link.findMany()
-    },
-    link: async (parent, { id }, context) => {
-      return await context.prisma.link.findUnique({ where: { id: parseInt(id) } })
-    }
-  },
-  Mutation: {
-    post: async (parent, args, context) => {
-      const newLink = await context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        },
-      })
-      return newLink
-    },
-    updateLink: async (parent, { id, url, description }, context) => {
-      await context.prisma.link.update({
-        where: { id: parseInt(id) },
-        data: {
-          url: url,
-          description: description,
-        },
-      })
-
-      return await context.prisma.link.findUnique({ where: { id: parseInt(id) } })
-    },
-    deleteLink: async (parent, { id }, context) => {
-      const link = await context.prisma.link.delete({
-        where: { id: parseInt(id) }
-      })
-
-      return link;
-    }
-  }
+  Query,
+  Mutation,
+  User,
+  Link
 }
 
 const prisma = new PrismaClient()
@@ -53,8 +25,15 @@ const server = new ApolloServer({
     'utf8'
   ),
   resolvers,
-  context: {
-    prisma,
+  context: ({ req }) => {
+    return {
+      ...req,
+      prisma,
+      userId:
+        req && req.headers.authorization
+          ? getUserId(req)
+          : null
+    };
   }
 })
 
