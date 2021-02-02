@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { APP_SECRET, getUserId } = require('../utils')
+const { APP_SECRET, getUserId } = require('../src/utils')
 
 async function signup(parent, args, context, info) {
 
@@ -73,5 +73,5 @@ module.exports = {
   login,
   post,
   updateLink,
-  deleteLink
+  deleteLink,
 }

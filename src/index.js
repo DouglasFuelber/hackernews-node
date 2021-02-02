@@ -5,10 +5,10 @@ const { PrismaClient } = require('@prisma/client')
 const { ApolloServer } = require('apollo-server');
 const { getUserId } = require('./utils');
 
-const Query = require('./resolvers/Query')
-const Mutation = require('./resolvers/Mutation')
-const User = require('./resolvers/User')
-const Link = require('./resolvers/Link')
+const Query = require('../resolvers/Query');
+const Mutation = require('../resolvers/Mutation');
+const User = require('../resolvers/User');
+const Link = require('../resolvers/Link');
 
 const resolvers = {
   Query,
